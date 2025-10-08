@@ -144,11 +144,13 @@ st.download_button(
 )
 
 # ---------------- GENERAR PDF (Unicode + Logo + Encabezado) ----------------
+# --- GENERAR PDF (Unicode + Logo + Encabezado + fuentes completas) ---
 class PDF(FPDF):
     def header(self):
-        # Fuente Unicode DejaVu
+        # Fuente Unicode DejaVu (normal, bold, italic)
         self.add_font("DejaVu", "", fname="/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", uni=True)
         self.add_font("DejaVu", "B", fname="/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", uni=True)
+        self.add_font("DejaVu", "I", fname="/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf", uni=True)
         self.set_font("DejaVu", "B", 16)
 
         # Logo (opcional)
@@ -174,6 +176,7 @@ class PDF(FPDF):
         self.set_font("DejaVu", "I", 8)
         self.set_text_color(150, 150, 150)
         self.cell(0, 10, f"Benessere © {datetime.now().year}  |  Confidential Financial Report", align="C")
+
 
 pdf = PDF()
 pdf.add_page()
