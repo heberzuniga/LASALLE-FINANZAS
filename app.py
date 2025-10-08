@@ -3,7 +3,8 @@ import streamlit as st
 
 # ---------------------- CONFIGURACIÓN GENERAL ----------------------
 st.set_page_config(
-    page_title="Benessere Açaí Lite – Interactive Financial Dashboard",
+
+    page_title=self.cell(0, 10, "Benessere Acai Lite - Executive Financial Report", ln=True, align="C"),
     page_icon="🍇",
     layout="wide"
 )
