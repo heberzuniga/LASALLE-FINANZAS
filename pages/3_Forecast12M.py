@@ -75,3 +75,19 @@ fig = px.bar(
     color_discrete_sequence=["#6C63FF"]
 )
 st.plotly_chart(fig, use_container_width=True)
+
+# ---------------- PANEL FINAL: LINK HACIA DASHBOARD EJECUTIVO ----------------
+st.markdown("---")
+if lang == "Español":
+    st.markdown("""
+    #### 📊 Accede al Panel Ejecutivo
+    Para ver un resumen consolidado con todos los KPIs y proyecciones,
+    abre la página **5_ExecutiveDashboard** desde el menú lateral.
+    """)
+else:
+    st.markdown("""
+    #### 📊 Go to Executive Dashboard
+    To view a consolidated summary with all KPIs and projections,
+    open **5_ExecutiveDashboard** from the sidebar menu.
+    """)
+
