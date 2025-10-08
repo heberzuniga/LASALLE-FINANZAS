@@ -3,8 +3,7 @@ import streamlit as st
 
 # ---------------------- CONFIGURACIÓN GENERAL ----------------------
 st.set_page_config(
-
-    page_title=self.cell(0, 10, "Benessere Acai Lite - Executive Financial Report", ln=True, align="C"),
+    page_title="Benessere Acai Lite - Executive Financial Report",
     page_icon="🍇",
     layout="wide"
 )
@@ -19,10 +18,25 @@ st.markdown("""
 </p>
 """, unsafe_allow_html=True)
 
-# ---------------------- SELECTOR DE IDIOMA GLOBAL ----------------------
-if "lang" not in st.session_state:
-    st.session_state["lang"] = "Español"
+# ---------------------- INICIALIZAR VARIABLES GLOBALES ----------------------
+# (Evita KeyError en todas las páginas si se accede directamente)
+defaults = {
+    "price_talla_m": 12.0,
+    "cost_acai_m": 3.5,
+    "cost_fruits": 2.0,
+    "cost_granola": 1.5,
+    "units_per_day": 100,
+    "working_days": 26,
+    "fixed_costs": 8000,
+    "discount_rate": 0.15,
+    "lang": "Español"
+}
 
+for key, value in defaults.items():
+    if key not in st.session_state:
+        st.session_state[key] = value
+
+# ---------------------- SELECTOR DE IDIOMA GLOBAL ----------------------
 language = st.sidebar.selectbox(
     "🌍 Language / Idioma",
     ["Español", "English"],
@@ -64,13 +78,15 @@ if language == "Español":
     - **1️⃣ Supuestos (Assumptions):** modifica precios, costos y días laborales.  
     - **2️⃣ Márgenes Unitarios (Unit Economics):** analiza el margen por producto.  
     - **3️⃣ Forecast 12M:** visualiza ingresos, utilidades, VAN y TIR.  
-    - **4️⃣ Uso de Fondos (Use of Funds):** distribuye capital inicial y genera gráfico de pastel.
+    - **4️⃣ Uso de Fondos (Use of Funds):** distribuye capital inicial y genera gráfico de pastel.  
+    - **5️⃣ Dashboard Ejecutivo:** consolida todos los indicadores y genera reportes PDF/Excel.
     
     ---
     ### 🧠 Cómo usar
     1. Ve a la pestaña **Assumptions** y ajusta tus parámetros.
     2. Navega a **Forecast 12M** para ver resultados dinámicos.
     3. Presenta los indicadores en modo presentación 🎥.
+    4. Exporta tus reportes desde el **Dashboard Ejecutivo**.
     """)
 else:
     st.markdown("""
@@ -88,11 +104,13 @@ else:
     - **1️⃣ Assumptions:** modify prices, costs, and working days.  
     - **2️⃣ Unit Economics:** analyze per-product margins.  
     - **3️⃣ Forecast 12M:** view revenue, profit, NPV and IRR.  
-    - **4️⃣ Use of Funds:** allocate initial capital and generate pie chart.
+    - **4️⃣ Use of Funds:** allocate initial capital and generate pie chart.  
+    - **5️⃣ Executive Dashboard:** consolidate all KPIs and export PDF/Excel reports.
     
     ---
     ### 🧠 How to use
     1. Go to the **Assumptions** tab and set your parameters.
     2. Navigate to **Forecast 12M** to view dynamic results.
     3. Present results in fullscreen 🎥 mode.
+    4. Export reports from the **Executive Dashboard**.
     """)
