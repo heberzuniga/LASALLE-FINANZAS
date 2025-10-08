@@ -19,7 +19,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ---------------------- INICIALIZAR VARIABLES GLOBALES ----------------------
-# (Evita KeyError en todas las páginas si se accede directamente)
 defaults = {
     "price_talla_m": 12.0,
     "cost_acai_m": 3.5,
@@ -66,8 +65,8 @@ def navbar():
             "📈 Executive Dashboard": "5_ExecutiveDashboard",
         }
 
-    st.markdown(
-        """
+    # --- CSS estilizado ---
+    st.markdown("""
         <style>
         .navbar {
             position: sticky;
@@ -78,7 +77,8 @@ def navbar():
             padding: 10px 0;
             display: flex;
             justify-content: center;
-            gap: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
             box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
         }
         .nav-button {
@@ -90,24 +90,25 @@ def navbar():
             cursor: pointer;
             font-weight: 500;
             font-size: 14px;
-            transition: 0.3s;
+            transition: all 0.3s ease;
         }
         .nav-button:hover {
             background-color: #594FE3;
+            transform: translateY(-2px);
+        }
+        form {
+            display: inline;
         }
         </style>
-        """,
-        unsafe_allow_html=True
-    )
+    """, unsafe_allow_html=True)
 
+    # --- HTML de los botones ---
     nav_html = "<div class='navbar'>"
     for label, page in pages.items():
-        nav_html += f"""
-            <form action='/{page}' target='_self'>
-                <button class='nav-button'>{label}</button>
-            </form>
-        """
+        nav_html += f"<form action='/{page}' target='_self'><button class='nav-button'>{label}</button></form>"
     nav_html += "</div>"
+
+    # --- Renderizar correctamente ---
     st.markdown(nav_html, unsafe_allow_html=True)
 
 # Mostrar la barra
@@ -156,7 +157,7 @@ if language == "Español":
     2. Navega a **Forecast 12M** para ver resultados dinámicos.
     3. Presenta los indicadores en modo presentación 🎥.
     4. Exporta tus reportes desde el **Dashboard Ejecutivo**.
-    """)
+    """, unsafe_allow_html=True)
 else:
     st.markdown("""
     ---
@@ -182,4 +183,4 @@ else:
     2. Navigate to **Forecast 12M** to view dynamic results.
     3. Present results in fullscreen 🎥 mode.
     4. Export reports from the **Executive Dashboard**.
-    """)
+    """, unsafe_allow_html=True)
