@@ -1,5 +1,6 @@
 # app.py
 import streamlit as st
+from streamlit_extras.switch_page_button import switch_page  # ✅ necesario para navegación real
 
 # ---------------------- CONFIGURACIÓN GENERAL ----------------------
 st.set_page_config(
@@ -44,11 +45,12 @@ st.session_state["lang"] = language
 
 # ---------------------- BARRA SUPERIOR DE NAVEGACIÓN ----------------------
 def navbar():
-    """Barra superior fija con botones de navegación."""
+    """Barra superior funcional con switch_page()"""
     lang = st.session_state["lang"]
+
     if lang == "Español":
         pages = {
-            "🏠 Inicio": "app.py",
+            "🏠 Inicio": "app",
             "📊 Supuestos": "1_Assumptions",
             "💸 Márgenes Unitarios": "2_UnitEconomics",
             "📅 Forecast 12M": "3_Forecast12M",
@@ -57,7 +59,7 @@ def navbar():
         }
     else:
         pages = {
-            "🏠 Home": "app.py",
+            "🏠 Home": "app",
             "📊 Assumptions": "1_Assumptions",
             "💸 Unit Economics": "2_UnitEconomics",
             "📅 12M Forecast": "3_Forecast12M",
@@ -96,20 +98,15 @@ def navbar():
             background-color: #594FE3;
             transform: translateY(-2px);
         }
-        form {
-            display: inline;
-        }
         </style>
     """, unsafe_allow_html=True)
 
-    # --- HTML de los botones ---
-    nav_html = "<div class='navbar'>"
-    for label, page in pages.items():
-        nav_html += f"<form action='/{page}' target='_self'><button class='nav-button'>{label}</button></form>"
-    nav_html += "</div>"
-
-    # --- Renderizar correctamente ---
-    st.markdown(nav_html, unsafe_allow_html=True)
+    # --- Crear botones Streamlit (no HTML) ---
+    cols = st.columns(len(pages))
+    for i, (label, target) in enumerate(pages.items()):
+        with cols[i]:
+            if st.button(label):
+                switch_page(target)  # ✅ navegación real sin error
 
 # Mostrar la barra
 navbar()
