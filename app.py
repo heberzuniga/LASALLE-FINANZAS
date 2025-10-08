@@ -31,7 +31,6 @@ defaults = {
     "discount_rate": 0.15,
     "lang": "Español"
 }
-
 for key, value in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = value
@@ -43,6 +42,76 @@ language = st.sidebar.selectbox(
     index=0 if st.session_state["lang"] == "Español" else 1
 )
 st.session_state["lang"] = language
+
+# ---------------------- BARRA SUPERIOR DE NAVEGACIÓN ----------------------
+def navbar():
+    """Barra superior fija con botones de navegación."""
+    lang = st.session_state["lang"]
+    if lang == "Español":
+        pages = {
+            "🏠 Inicio": "app.py",
+            "📊 Supuestos": "1_Assumptions",
+            "💸 Márgenes Unitarios": "2_UnitEconomics",
+            "📅 Forecast 12M": "3_Forecast12M",
+            "💰 Uso de Fondos": "4_UseOfFunds",
+            "📈 Dashboard Ejecutivo": "5_ExecutiveDashboard",
+        }
+    else:
+        pages = {
+            "🏠 Home": "app.py",
+            "📊 Assumptions": "1_Assumptions",
+            "💸 Unit Economics": "2_UnitEconomics",
+            "📅 12M Forecast": "3_Forecast12M",
+            "💰 Use of Funds": "4_UseOfFunds",
+            "📈 Executive Dashboard": "5_ExecutiveDashboard",
+        }
+
+    st.markdown(
+        """
+        <style>
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background-color: white;
+            border-bottom: 1px solid #EAEAEA;
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
+        }
+        .nav-button {
+            background-color: #6C63FF;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .nav-button:hover {
+            background-color: #594FE3;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    nav_html = "<div class='navbar'>"
+    for label, page in pages.items():
+        nav_html += f"""
+            <form action='/{page}' target='_self'>
+                <button class='nav-button'>{label}</button>
+            </form>
+        """
+    nav_html += "</div>"
+    st.markdown(nav_html, unsafe_allow_html=True)
+
+# Mostrar la barra
+navbar()
 
 # ---------------------- BOTÓN DE MODO PRESENTACIÓN ----------------------
 if st.sidebar.button("🎥 Iniciar modo presentación / Start presentation mode"):
