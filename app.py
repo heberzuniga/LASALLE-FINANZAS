@@ -73,14 +73,15 @@ def navbar():
             position: sticky;
             top: 0;
             z-index: 999;
-            background-color: white;
+            background-color: #ffffffcc;  /* blanco translúcido elegante */
+            backdrop-filter: blur(8px);
             border-bottom: 1px solid #EAEAEA;
-            padding: 10px 0;
+            padding: 12px 0;
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 10px;
-            box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
+            gap: 12px;
+            box-shadow: 0px 2px 4px rgba(0,0,0,0.08);
         }
         .nav-button {
             background-color: #6C63FF;
@@ -96,11 +97,12 @@ def navbar():
         .nav-button:hover {
             background-color: #594FE3;
             transform: translateY(-2px);
+            box-shadow: 0px 4px 6px rgba(108, 99, 255, 0.3);
         }
         </style>
     """, unsafe_allow_html=True)
 
-    # --- HTML funcional que redirige entre páginas ---
+    # --- HTML funcional (redirige entre páginas Streamlit) ---
     nav_html = "<div class='navbar'>"
     for label, page in pages.items():
         if page == "app":
@@ -114,6 +116,7 @@ def navbar():
         """
     nav_html += "</div>"
 
+    # ✅ Renderizado correcto
     st.markdown(nav_html, unsafe_allow_html=True)
 
 # Mostrar la barra
