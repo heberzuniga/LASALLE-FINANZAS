@@ -66,58 +66,55 @@ def navbar():
             "📈 Executive Dashboard": "5_ExecutiveDashboard",
         }
 
-    # --- CSS estilizado ---
+    # --- CSS de la barra ---
     st.markdown("""
-        <style>
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 999;
-            background-color: #ffffffcc;  /* blanco translúcido elegante */
-            backdrop-filter: blur(8px);
-            border-bottom: 1px solid #EAEAEA;
-            padding: 12px 0;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            box-shadow: 0px 2px 4px rgba(0,0,0,0.08);
-        }
-        .nav-button {
-            background-color: #6C63FF;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        .nav-button:hover {
-            background-color: #594FE3;
-            transform: translateY(-2px);
-            box-shadow: 0px 4px 6px rgba(108, 99, 255, 0.3);
-        }
-        </style>
+    <style>
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        background-color: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid #EAEAEA;
+        padding: 12px 0;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    }
+    .nav-button {
+        background-color: #6C63FF;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    .nav-button:hover {
+        background-color: #594FE3;
+        transform: translateY(-2px);
+        box-shadow: 0px 4px 6px rgba(108, 99, 255, 0.3);
+    }
+    </style>
     """, unsafe_allow_html=True)
 
     # --- HTML funcional (redirige entre páginas Streamlit) ---
     nav_html = "<div class='navbar'>"
     for label, page in pages.items():
-        if page == "app":
-            href = "/"
-        else:
-            href = f"/{page}"
+        href = "/" if page == "app" else f"/{page}"
         nav_html += f"""
-            <form action="{href}" method="get" target="_self" style="display:inline;">
-                <button class="nav-button">{label}</button>
-            </form>
+        <form action="{href}" method="get" target="_self" style="display:inline;">
+            <button class="nav-button">{label}</button>
+        </form>
         """
     nav_html += "</div>"
 
-    # ✅ Renderizado correcto
-    st.markdown(nav_html, unsafe_allow_html=True)
+    # 🔥 Renderiza realmente el HTML (clave)
+    st.components.v1.html(nav_html, height=80)
 
 # Mostrar la barra
 navbar()
