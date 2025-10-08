@@ -30,11 +30,11 @@ defaults = {
     "discount_rate": 0.15,
     "lang": "Español"
 }
-for key, value in defaults.items():
-    if key not in st.session_state:
-        st.session_state[key] = value
+for k, v in defaults.items():
+    if k not in st.session_state:
+        st.session_state[k] = v
 
-# ---------------------- SELECTOR DE IDIOMA GLOBAL ----------------------
+# ---------------------- SELECTOR DE IDIOMA ----------------------
 language = st.sidebar.selectbox(
     "🌍 Language / Idioma",
     ["Español", "English"],
@@ -42,101 +42,55 @@ language = st.sidebar.selectbox(
 )
 st.session_state["lang"] = language
 
-# ---------------------- BARRA SUPERIOR DE NAVEGACIÓN ----------------------
+# ---------------------- NAVBAR CON BOTONES STREAMLIT ----------------------
 def navbar():
-    """Barra superior fija y funcional sin dependencias externas."""
-    lang = st.session_state["lang"]
-
-    if lang == "Español":
-        pages = {
-            "🏠 Inicio": "app",
-            "📊 Supuestos": "1_Assumptions",
-            "💸 Márgenes Unitarios": "2_UnitEconomics",
-            "📅 Forecast 12M": "3_Forecast12M",
-            "💰 Uso de Fondos": "4_UseOfFunds",
-            "📈 Dashboard Ejecutivo": "5_ExecutiveDashboard",
-        }
-    else:
-        pages = {
-            "🏠 Home": "app",
-            "📊 Assumptions": "1_Assumptions",
-            "💸 Unit Economics": "2_UnitEconomics",
-            "📅 12M Forecast": "3_Forecast12M",
-            "💰 Use of Funds": "4_UseOfFunds",
-            "📈 Executive Dashboard": "5_ExecutiveDashboard",
-        }
-
-    # --- CSS de la barra ---
-    st.markdown("""
-    <style>
-    .navbar {
-        position: sticky;
-        top: 0;
-        z-index: 999;
-        background-color: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(8px);
-        border-bottom: 1px solid #EAEAEA;
-        padding: 12px 0;
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 12px;
-        box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
-    }
-    .nav-button {
-        background-color: #6C63FF;
-        color: white;
-        border: none;
-        padding: 8px 20px;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: 500;
-        font-size: 14px;
-        transition: all 0.3s ease;
-    }
-    .nav-button:hover {
-        background-color: #594FE3;
-        transform: translateY(-2px);
-        box-shadow: 0px 4px 6px rgba(108, 99, 255, 0.3);
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    # --- HTML funcional (redirige entre páginas Streamlit) ---
-    nav_html = "<div class='navbar'>"
-    for label, page in pages.items():
-        href = "/" if page == "app" else f"/{page}"
-        nav_html += f"""
-        <form action="{href}" method="get" target="_self" style="display:inline;">
-            <button class="nav-button">{label}</button>
-        </form>
+    st.markdown(
         """
-    nav_html += "</div>"
+        <style>
+        div[data-testid="column"] {
+            text-align: center;
+        }
+        button[kind="secondary"] {
+            background-color: #6C63FF !important;
+            color: white !important;
+            border-radius: 25px !important;
+            font-weight: 500 !important;
+            border: none !important;
+        }
+        button[kind="secondary"]:hover {
+            background-color: #594FE3 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(108,99,255,0.3);
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-    # 🔥 Renderiza realmente el HTML (clave)
-    st.components.v1.html(nav_html, height=80)
+    cols = st.columns(6)
+    labels = [
+        "🏠 Inicio" if language == "Español" else "🏠 Home",
+        "📊 Supuestos" if language == "Español" else "📊 Assumptions",
+        "💸 Márgenes" if language == "Español" else "💸 Unit Economics",
+        "📅 Forecast 12M",
+        "💰 Fondos" if language == "Español" else "💰 Use of Funds",
+        "📈 Dashboard"
+    ]
+    pages = [
+        "app.py",
+        "pages/1_Assumptions.py",
+        "pages/2_UnitEconomics.py",
+        "pages/3_Forecast12M.py",
+        "pages/4_UseOfFunds.py",
+        "pages/5_ExecutiveDashboard.py"
+    ]
+    for i, col in enumerate(cols):
+        if col.button(labels[i]):
+            st.switch_page(pages[i])
 
-# Mostrar la barra
 navbar()
 
-# ---------------------- BOTÓN DE MODO PRESENTACIÓN ----------------------
-if st.sidebar.button("🎥 Iniciar modo presentación / Start presentation mode"):
-    st.markdown("""
-        <script>
-            var elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.mozRequestFullScreen) {
-                elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
-            }
-        </script>
-    """, unsafe_allow_html=True)
-
-# ---------------------- CONTENIDO DE PORTADA ----------------------
+# ---------------------- CONTENIDO PRINCIPAL ----------------------
 if language == "Español":
     st.markdown("""
     ---
@@ -147,7 +101,7 @@ if language == "Español":
     Permite ajustar precios, costos y escenarios operativos para analizar indicadores clave como el 
     **Margen Bruto**, **VAN**, **TIR** y **Payback**, ofreciendo una visión clara y profesional para 
     presentaciones ante inversionistas.
-    
+
     ---
     ### 🧭 Navegación
     - **1️⃣ Supuestos (Assumptions):** modifica precios, costos y días laborales.  
@@ -155,13 +109,13 @@ if language == "Español":
     - **3️⃣ Forecast 12M:** visualiza ingresos, utilidades, VAN y TIR.  
     - **4️⃣ Uso de Fondos (Use of Funds):** distribuye capital inicial y genera gráfico de pastel.  
     - **5️⃣ Dashboard Ejecutivo:** consolida todos los indicadores y genera reportes PDF/Excel.
-    
+
     ---
     ### 🧠 Cómo usar
-    1. Ve a la pestaña **Assumptions** y ajusta tus parámetros.
-    2. Navega a **Forecast 12M** para ver resultados dinámicos.
-    3. Presenta los indicadores en modo presentación 🎥.
-    4. Exporta tus reportes desde el **Dashboard Ejecutivo**.
+    1. Ve a la pestaña **Assumptions** y ajusta tus parámetros.  
+    2. Navega a **Forecast 12M** para ver resultados dinámicos.  
+    3. Presenta los indicadores en modo presentación 🎥.  
+    4. Exporta reportes desde el **Dashboard Ejecutivo**.
     """, unsafe_allow_html=True)
 else:
     st.markdown("""
@@ -173,7 +127,7 @@ else:
     It allows adjusting prices, costs, and operating scenarios to analyze key indicators such as 
     **Gross Margin**, **NPV**, **IRR**, and **Payback**, providing a clear and professional view 
     for investor presentations.
-    
+
     ---
     ### 🧭 Navigation
     - **1️⃣ Assumptions:** modify prices, costs, and working days.  
@@ -181,11 +135,11 @@ else:
     - **3️⃣ Forecast 12M:** view revenue, profit, NPV and IRR.  
     - **4️⃣ Use of Funds:** allocate initial capital and generate pie chart.  
     - **5️⃣ Executive Dashboard:** consolidate all KPIs and export PDF/Excel reports.
-    
+
     ---
     ### 🧠 How to use
-    1. Go to the **Assumptions** tab and set your parameters.
-    2. Navigate to **Forecast 12M** to view dynamic results.
-    3. Present results in fullscreen 🎥 mode.
-    4. Export reports from the **Executive Dashboard**.
+    1. Go to **Assumptions** and adjust your parameters.  
+    2. Navigate to **Forecast 12M** for dynamic results.  
+    3. Present in fullscreen 🎥 mode.  
+    4. Export your reports from the **Executive Dashboard**.
     """, unsafe_allow_html=True)
