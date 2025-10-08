@@ -50,8 +50,15 @@ fig = px.pie(
 st.plotly_chart(fig, use_container_width=True)
 
 # Mostrar tabla con formato seguro
-num_cols = df.select_dtypes(include=["number"]).columns
-st.dataframe(df.style.format(subset=num_cols, formatter="{:.2f}"))
+
+# Formatear numéricamente sin usar .style (más estable en Streamlit Cloud)
+df_formatted = df.copy()
+for col in df_formatted.select_dtypes(include=["number"]).columns:
+    df_formatted[col] = df_formatted[col].map("{:,.2f}".format)
+
+st.dataframe(df_formatted)
+
+
 
 # Mostrar total
 total = df["Monto [Bs] / Amount [Bs]"].sum()
