@@ -1,6 +1,5 @@
 # app.py
 import streamlit as st
-from streamlit_extras.switch_page_button import switch_page  # ✅ necesario para navegación real
 
 # ---------------------- CONFIGURACIÓN GENERAL ----------------------
 st.set_page_config(
@@ -45,7 +44,7 @@ st.session_state["lang"] = language
 
 # ---------------------- BARRA SUPERIOR DE NAVEGACIÓN ----------------------
 def navbar():
-    """Barra superior funcional con switch_page()"""
+    """Barra superior fija y funcional sin dependencias externas."""
     lang = st.session_state["lang"]
 
     if lang == "Español":
@@ -101,12 +100,21 @@ def navbar():
         </style>
     """, unsafe_allow_html=True)
 
-    # --- Crear botones Streamlit (no HTML) ---
-    cols = st.columns(len(pages))
-    for i, (label, target) in enumerate(pages.items()):
-        with cols[i]:
-            if st.button(label):
-                switch_page(target)  # ✅ navegación real sin error
+    # --- HTML funcional que redirige entre páginas ---
+    nav_html = "<div class='navbar'>"
+    for label, page in pages.items():
+        if page == "app":
+            href = "/"
+        else:
+            href = f"/{page}"
+        nav_html += f"""
+            <form action="{href}" method="get" target="_self" style="display:inline;">
+                <button class="nav-button">{label}</button>
+            </form>
+        """
+    nav_html += "</div>"
+
+    st.markdown(nav_html, unsafe_allow_html=True)
 
 # Mostrar la barra
 navbar()
